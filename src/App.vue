@@ -1,30 +1,52 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+	<div id="app">
+		<div class="flex-center app-loader" v-if="globalLoading">
+			<div class="app-loader-container">
+				<Loader></Loader>
+			</div>
+		</div>
+		<div v-else>
+			<router-view />
+		</div>
+	</div>
 </template>
+<script>
+import Loader from "./components/Loader.vue"
+export default {
+	components:{
+		Loader
+	},
+	watch: {
+		user(newValue, oldValue) {
+			if(!newValue&&oldValue){
+				this.$router.push('/login')
+			}
+
+		},
+		globalLoading(newValue, oldValue){
+			console.log('newValue, oldValue',newValue&&!oldValue);
+			if(!newValue&&oldValue){
+				if(this.$store.getters.isLoggedIn){
+					this.$router.push('/')
+				}
+			}
+		}
+	},
+	computed:{
+		user(){
+			return this.$store.state.user
+		},
+		globalLoading(){
+			return this.$store.state.globalLoading
+		}
+	},
+
+	created(){
+		this.$store.dispatch('initApp')
+		// this.$store.dispatch('googleSignout')	
+	}
+};
+</script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>

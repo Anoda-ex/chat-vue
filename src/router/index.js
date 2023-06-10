@@ -1,25 +1,41 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import Vue from 'vue'
+import MainLayout from '../views/MainLayout.vue'
+import Login from '../views/Login.vue'
+import { createRouter,createWebHistory} from 'vue-router'
+import store from '../store/index.js'
+// import HomeView from '../views/HomeView.vue'
+
+// Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login
+    },
+    {
+        path: '/',
+        name: 'MainLayout',
+        meta: { requiresAuth: true },
+        component: MainLayout
+    },
+
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+  history: createWebHistory(),
+  routes, // short for `routes: routes`
 })
 
+router.beforeEach((to, from, next) => {
+    if (!store.getters.isLoggedIn && to.matched.some((route) => route.meta?.requiresAuth)) {
+        next("/login");
+    } else {
+        if(to.name){
+            next()
+        }else{
+            next('/');
+        }
+    }
+  });
 export default router
