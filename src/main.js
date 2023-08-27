@@ -12,6 +12,7 @@ export const firebaseApp = initializeApp({
 	appId: "1:901042021817:web:0f4d9ea44b0cee878d0268"
 });
 
+
 let app = createApp(App)
 app.use(router);
 app.config.globalProperties.$console = console

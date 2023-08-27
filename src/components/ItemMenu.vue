@@ -21,10 +21,13 @@
         </Menu>
         <Menu :iconType="iconType" v-else>
             <div class="menu__list">
-                <div v-if="$store.getters.chatInUserChats(item.cid)" @click="inviteUsersPopup.show=true; inviteUsersPopup.chatData = item">
+                <div v-if="$store.getters.chatInUserChats(item.cid)" @click.stop="inviteUsersPopup.show=true; inviteUsersPopup.chatData = item">
                     <div class="menu__item">Invite Users</div>
                 </div>
-                <div v-if=" $store.getters.userIsChatAdmin(item.cid)" @click="chatSettingsPopup.show=true; chatSettingsPopup.cid = item.cid">
+                <!-- <div v-if="$store.getters.chatInUserChats(item.cid)" @click.stop="chatInfoPopup.show=true; chatInfoPopup.chatData = item">
+                    <div class="menu__item">Chat Info</div>
+                </div> -->
+                <div v-if="$store.getters.userIsChatAdmin(item.cid)" @click="chatSettingsPopup.show=true; chatSettingsPopup.cid = item.cid">
                     <div class="menu__item">Settings</div>
                 </div>
                 <div v-if="!$store.getters.chatInUserChats(item.cid)" @click="$store.dispatch('addUserToChat', {uid:$store.state.user.uid, cid:item.cid})">

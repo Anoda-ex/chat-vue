@@ -1,5 +1,5 @@
 <template>
-    <div class="room__item" @click="$store.commit('selectChat', {item:item})" :class="{'room__item--selected':($store.getters.selectedChat && $store.getters.selectedChat.cid)===item.cid}">
+    <div class="room__item menu-event-area" ref="roomItem" @click="selectChat(item)" :class="{'room__item--selected':($store.getters.selectedChat && $store.getters.selectedChat.cid)===item.cid}">
         <div class="room__container">
             <div class="chat-avatar">
                 <img :src="item.image"/> 
@@ -50,7 +50,17 @@ export default {
         }
     },
     methods:{
-     
+        selectChat(item){
+            // console.log('selectChat', document.querySelector('menu__options--opened'));
+            if(this.$refs.roomItem && document.querySelector('.menu__options--opened')){
+                return
+            }
+            let sidebarButton = document.querySelector('.chat__header-sidebar-button')
+            if(sidebarButton){
+                sidebarButton.classList.remove('chat__rotate-icon')
+            }
+            this.$store.commit('selectChat', {item:item});
+        }
       
 
     },

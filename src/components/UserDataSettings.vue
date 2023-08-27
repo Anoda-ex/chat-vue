@@ -1,8 +1,8 @@
 <template>
     <div class="">
         <div v-if="isLoginForm" class="login__title">Your info</div>
-        <div class="login__avatar-wrapper">
-            <div class="login__avatar" @click="$refs.imageInputRef.click()">
+        <div class="avatar-wrapper">
+            <div class="avatar" @click="$refs.imageInputRef.click()">
                 <input ref="imageInputRef" style="display:none" type="file" @change="selectFile($event)" accept="image/*"/>
                 <img :src="avatarSrc" alt="">
             </div>

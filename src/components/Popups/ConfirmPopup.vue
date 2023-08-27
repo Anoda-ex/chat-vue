@@ -1,5 +1,5 @@
 <template>
-    <div class="popup">
+    <div class="popup confirmation-popup">
         <div  class="overlay">
             <div class="popup__wrapper" v-click-outside="()=>{$emit('close')}">
                 <div class="popup__header">

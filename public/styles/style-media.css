@@ -1,0 +1,39 @@
+@media(max-width: 578px) {
+    .popup:not(.confirmation-popup) .overlay{
+        padding: 0;
+        overflow: hidden;
+    }
+    .popup .popup__wrapper{
+        max-width: unset;
+        min-width: unset;
+        width: 100%;
+
+    }
+    .popup:not(.confirmation-popup) .popup__wrapper{
+        height: 100%;
+        border-radius: 0;
+    }
+    .popup:not(.confirmation-popup) .no-chat-wrapper{
+        display: none;
+    }
+   
+}
+@media(max-width: 768px) {
+    .chat-chat-container:has(.no-chat-wrapper) .chat__rooms-container, .chat-chat-container:has(.chat__svg-button.chat__toggle-button.chat__rotate-icon-init.chat__rotate-icon) .chat__rooms-container{
+        width: 100%;
+        min-width: unset;
+        max-width: unset;
+        flex:unset;
+        display: flex;        
+
+    }
+    .no-chat-wrapper, .chat-chat-container:has(.chat__svg-button.chat__toggle-button.chat__rotate-icon-init:not(.chat__rotate-icon)) .chat__rooms-container{
+        display: none;
+    }
+
+    /* .chat-chat-container:has(.chat__svg-button.chat__toggle-button.chat__rotate-icon-init.chat__rotate-icon) .chat__rooms-container{
+    } */
+    .chat-chat-container:has(.chat__svg-button.chat__toggle-button.chat__rotate-icon-init.chat__rotate-icon) .chat{
+        display: none;
+    }
+}

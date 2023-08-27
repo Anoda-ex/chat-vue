@@ -131,9 +131,7 @@ const store = createStore({
 			});
 		},
 		
-		// getUserData(uid){
-		// 	console.log(createUserData)
-		// },
+		
 
 
 
@@ -375,12 +373,10 @@ const store = createStore({
 			get(searchedChatsDataRef).then((snapshot) => {
 				const chatsData = snapshot.val();
 				
-				console.log('search chats', snapshot.exists(), chatsData);
 				
 				const searchedUsersDataRef  = query(ref(db, '/usersData'), orderByChild('username'), startAt(searchValue), endAt(searchValue+"\uf8ff"))
 				get(searchedUsersDataRef).then((snapshot) => {
 					const usersData = snapshot.val();
-					console.log('search users', snapshot.exists(), usersData);
 					
 					context.commit('setSearchedItems',{
 						chatsData:chatsData || {},
@@ -392,13 +388,6 @@ const store = createStore({
 				});
 
 
-
-				// console.log('search chats', snapshot.exists(), data);
-				// if(snapshot.exists()){
-					
-				// }else{
-				
-				// }
 			  }).catch((error) => {
 				console.error(error);
 			  }); 
@@ -434,7 +423,6 @@ const store = createStore({
 				const data = snapshot.val();
 				if(data){
 					context.commit('setMessageData', {mid:payload.mid, data: data})
-					console.log('message subscribe', data);
 					if(data.uid){
 						context.dispatch('userSubscribe', {uid:data.uid})
 					}
@@ -465,7 +453,6 @@ const store = createStore({
 					}
 
 					
-					console.log('chatSubscribe get Value', data );
 				}
 			});
 			this.commit('addSubscription', {id: payload.cid, unsubscribe:unsubscribe})
@@ -512,7 +499,8 @@ const store = createStore({
 		sendMessage(context, payload){
 			let message={
 				messageBody:{
-					text:payload.text
+					text:payload.text||null,
+					voiceMessageData:payload.voiceMessageData||null
 				},
 				createdAt: serverTimestamp(),
 				uid: context.state.user.uid
@@ -565,16 +553,20 @@ const store = createStore({
 					let time = null;
 					let isPrivate = item.type==='private';
 					let messagesData=[]
-					console.log('messagesData',item.messagesData);
 					if(item.messagesData){
 						Object.keys(item.messagesData).forEach(mid=>{
 							let messageData = state.messagesData[mid]
 							if(messageData){
+								let type='text';
+								if(messageData.messageBody.voiceMessageData){
+									type='voiceMessage'
+								}
 								messagesData.push({
 									...messageData,
 									isMyMessage: messageData.uid===state.user.uid,
 									mid: mid,
-									time:getTimeOfDay(messageData.createdAt)
+									time:getTimeOfDay(messageData.createdAt),
+									type:type
 
 								})
 							}
@@ -589,7 +581,6 @@ const store = createStore({
 						time = getDate(item.createdAt);
 						lastMessageText = `${typeName} has been created`
 					}
-					console.log('messagesData',messagesData);
 					// this.mes
 					res.push({
 						cid:cid,

@@ -74,42 +74,6 @@
         <div class="login" v-if="step===2">
             <div class="login__wrapper">
                 <UserDataSettings @close="$router.push('/')"></UserDataSettings>
-                <!-- <div class="login__title">Your info</div>
-                <div class="login__avatar-wrapper">
-                    <div class="login__avatar" @click="$refs.imageInputRef.click()">
-                        <input ref="imageInputRef" style="display:none" type="file" @change="selectFile($event)" accept="image/*"/>
-                        <img :src="avatarSrc" alt="">
-                    </div>
-                </div>
-                <div class="form">
-                    <div class="form-text login__left-padding">Name</div>
-                    <input class="form-input"  v-model="values.name.value"/>
-                    <div class="form-error" v-if="this.values.passwordRepeat.error">
-                        <img :src="require('../assets/img/error-icon.svg')"/>
-                        {{this.values.passwordRepeat.error}}
-                    </div>
-                </div>
-                <div class="form">
-                    <div class="form-text login__left-padding">Username</div>
-                    <input class="form-input"  v-model="values.username.value"/>
-                    <div class="form-error" v-if="this.values.passwordRepeat.error">
-                        <img :src="require('../assets/img/error-icon.svg')"/>
-                        {{this.values.passwordRepeat.error}}
-                    </div>
-                </div>
-                <div class="form">
-                    <div class="form-text login__left-padding">Description</div>
-                    <input class="form-input"  v-model="values.description.value"/>
-                    <div class="form-error" v-if="this.values.passwordRepeat.error">
-                        <img :src="require('../assets/img/error-icon.svg')"/>
-                        {{this.values.passwordRepeat.error}}
-                    </div>
-                </div>
-                <template v-if="signInForm">
-                    <div class="login__button login__button--red mt-40">Complete</div>
-                </template> -->
-               
-              
             </div>
         </div>
     </div>

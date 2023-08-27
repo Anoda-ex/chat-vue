@@ -10,7 +10,18 @@
                 </div>
                 <div class="popup__body">
                     <div class="">
-                        <div class="avatar-wrapper">
+                        <div class="chat-data__header">
+                            <div class="avatar" @click="$refs.imageInputRef.click()">
+                                <input ref="imageInputRef" style="display:none" type="file" @change="selectFile($event)" accept="image/*" />
+                                <img :src="avatarSrc" alt="">
+                            </div>
+                            <div class="chat-data__header-wrapper">
+                                <div class="chat-data__header-name"></div>
+                                <div class="chat-data__header-members"></div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="avatar-wrapper">
                             <div class="avatar" @click="$refs.imageInputRef.click()">
                                 <input ref="imageInputRef" style="display:none" type="file" @change="selectFile($event)" accept="image/*" />
                                 <img :src="avatarSrc" alt="">
@@ -39,7 +50,7 @@
                         </div>
                         <div class="flex-center mt-30">
                             <button @click="confirm" class="btn btn--blue mt-40">Confirm</button>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
