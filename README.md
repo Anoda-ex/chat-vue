@@ -1,5 +1,6 @@
 # chat
-Its a messanger developed on vue and firebase \n
+Its a messanger developed on vue and firebase
+```
 You can use this app in hosting: [https://chat-vue-df975.web.app/](url)
 ## Project setup
 ```
