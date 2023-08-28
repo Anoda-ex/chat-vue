@@ -54,7 +54,7 @@ export function getTimeOfDay(time) {
     const timeOfDay = `${hours}:${minutes}`;
     return timeOfDay;
   }
-export function formatMilliseconds(milliseconds) {
+export function  formatMilliseconds(milliseconds) {
     // Преобразование миллисекунд в секунды
     var seconds = Math.floor(milliseconds / 1000);
     
@@ -69,4 +69,48 @@ export function formatMilliseconds(milliseconds) {
     // Возвращение форматированной строки
     return formattedMinutes + ":" + formattedSeconds;
 }
-  
+export async function getBlobDuration (blob){
+    const tempVideoEl = document.createElement('audio')
+    
+   
+   
+    const durationP = new Promise((resolve, reject) => {
+        let loadedMetaData = () => {
+            if(tempVideoEl.duration === Infinity) {
+                tempVideoEl.currentTime = Number.MAX_SAFE_INTEGER
+                tempVideoEl.ontimeupdate = () => {
+                    tempVideoEl.ontimeupdate = null
+                    resolve(tempVideoEl.duration)
+                    clearData();
+                }
+            }
+            else{
+                resolve(tempVideoEl.duration);
+                clearData();
+            }
+        }
+        function clearData() {
+            tempVideoEl.removeEventListener('loadedmetadata', loadedMetaData)
+            tempVideoEl.remove()
+        }
+        tempVideoEl.addEventListener('loadedmetadata', loadedMetaData)
+        tempVideoEl.onerror = (event) => reject(event.target.error)
+    })
+    tempVideoEl.src = typeof blob === 'string' || blob instanceof String
+        ? blob
+        : window.URL.createObjectURL(blob)
+    return durationP
+}
+export const convertURIToBinary = (dataURI) => {
+    let BASE64_MARKER = ';base64,';
+    let base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
+    let base64 = dataURI.substring(base64Index);
+    let raw = window.atob(base64);
+    let rawLength = raw.length;
+    let arr = new Uint8Array(new ArrayBuffer(rawLength));
+
+    for (let i = 0; i < rawLength; i++) {
+        arr[i] = raw.charCodeAt(i);
+    }
+    return arr;
+}

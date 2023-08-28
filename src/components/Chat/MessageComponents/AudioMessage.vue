@@ -7,24 +7,26 @@
                     <svg v-else @click="pause" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 48 48"><path id="vac-icon-audio-pause" d="M17.991,40.976c0,3.662-2.969,6.631-6.631,6.631l0,0c-3.662,0-6.631-2.969-6.631-6.631V6.631C4.729,2.969,7.698,0,11.36,0l0,0c3.662,0,6.631,2.969,6.631,6.631V40.976z"></path><path id="vac-icon-audio-pause" d="M42.877,40.976c0,3.662-2.969,6.631-6.631,6.631l0,0c-3.662,0-6.631-2.969-6.631-6.631V6.631C29.616,2.969,32.585,0,36.246,0l0,0c3.662,0,6.631,2.969,6.631,6.631V40.976z"></path></svg>
                 </div>
                 <div class="chat-player-bar">
-                    <!-- <div class="chat-player-progress">
-                        <div class="chat-line-container">
-                            <div class="chat-line-progress" style="width: 0%;"></div>
-                            <div class="chat-line-dot" style="left: 0%;"></div>
-                        </div>
-                    </div> -->
-                    <input class="chat-audio-range" type="range" min="0" max="100" step="1" :value="currentTime" @change="changeCurrentTime"/>
+                    <input 
+                        class="chat-audio-range" 
+                        type="range" 
+                        min="0" 
+                        max="100" 
+                        step="1" 
+                        :value="(currentTime/duration)*100" 
+                        @change="changeCurrentTime"
+                    />
                 </div>
                 <audio ref="audioPlayer" :src="source"></audio>
             </div>
         </div>
-        <div v-if="currentTime" class="vac-progress-time">{{formatMilliseconds(currentTime*1000)}}</div>
-        <div v-else-if="duration" class="vac-progress-time">{{duration}}</div>
+        <div v-if="currentTime" class="vac-progress-time">{{`${formatMilliseconds(currentTime*1000)}/${formatMilliseconds(duration*1000)}`}}</div>
+        <div v-else-if="duration" class="vac-progress-time">{{formatMilliseconds(duration*1000)}}</div>
         <div v-else class="vac-progress-time">--:--</div>
     </div>
 </template>
 <script>
-import {formatMilliseconds} from '../../../helpers/functions'
+import {convertURIToBinary, formatMilliseconds, getBlobDuration} from '../../../helpers/functions'
 export default {
     props:['message'],
     data(){
@@ -41,12 +43,17 @@ export default {
             this.playing=true;
         },
         pause(){
+            // console.log(formatMilliseconds(currentTime*1000)/formatMilliseconds(this.duration*1000));
             this.audioPlayer.pause();
             this.playing=false;
         },
         changeCurrentTime(event){
-            console.log('changeCurrentTime', event);
-            this.audioPlayer.currentTime=0;
+            console.log('changeCurrentTime', event.target.value/100);
+            let currentPercent = event.target.value/100
+            this.audioPlayer.currentTime = this.duration*currentPercent;
+            if(!this.playing){
+                this.play()
+            }
         },
         reset(){
             this.playing = false
@@ -60,21 +67,17 @@ export default {
         endedListener(event){
             this.reset()
         },
-        loadeddataListener(event){
-            this.duration=this.audioPlayer.duration;
-
-            if (this.audioPlayer === Infinity) {
-                this.audioPlayer.currentTime = 10000000;
-                setTimeout(() => {
-                    this.audioPlayer.currentTime = 0; // to reset the time, so it starts at the beginning
-                }, 1000);
-            }
-            this.duration=this.audioPlayer.duration;
+        getDurationChange(){
+            let binary = convertURIToBinary(this.message.messageBody.voiceMessageData);
+            const audioBlob = new Blob([binary]);
+            getBlobDuration(audioBlob).then(res=>{
+                this.duration=res;
+                console.log('res', res);
+            })
         },
-        durationchangeListener(event){
-            console.log('durationchangeListener', event, this.audioPlayer.duration);
-            // this.duration=this.audioPlayer.duration;
-        },
+        // loadeddataListener(event){
+            
+        // },
         formatMilliseconds
     },
     computed:{
@@ -86,19 +89,18 @@ export default {
  
     },
     mounted(){
+        this.getDurationChange();
         this.audioPlayer=this.$refs.audioPlayer;
         this.audioPlayer.addEventListener('timeupdate', this.timeupdateListener);
         this.audioPlayer.addEventListener('ended', this.endedListener);
-        this.audioPlayer.addEventListener('durationchange', this.durationchangeListener);
+        // this.audioPlayer.addEventListener('durationchange', this.durationchangeListener);
         this.audioPlayer.addEventListener('loadeddata', this.loadeddataListener);
     },
     beforeDestroy(){
         this.audioPlayer.removeEventListener('timeupdate', this.timeupdateListener);
         this.audioPlayer.removeEventListener('ended', this.endedListener);
-        this.audioPlayer.removeEventListener('durationchange', this.durationchangeListener);
+        // this.audioPlayer.removeEventListener('durationchange', this.durationchangeListener);
         this.audioPlayer.removeEventListener('loadeddata', this.loadeddataListener);
-
-
     }
 }
 </script>
