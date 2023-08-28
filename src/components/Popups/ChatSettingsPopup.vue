@@ -18,23 +18,23 @@
                         </div>
                         <div class="form-block">
                             <div class="form-text login__left-padding">{{typeName}} name</div>
-                            <input class="form-input" v-model="values.name.value" />
-                            <div class="form-error" v-if="values.name.error">
-                                <img :src="require('../../assets/img/error-icon.svg')" /> {{this.values.name.error}}
+                            <input class="form-input" v-model="valuesData.name.value" />
+                            <div class="form-error" v-if="valuesData.name.error">
+                                <img :src="require('../../assets/img/error-icon.svg')" /> {{this.valuesData.name.error}}
                             </div>
                         </div>
                         <div class="form-block">
                             <div class="form-text login__left-padding">{{typeName}} identifier</div>
-                            <input class="form-input" v-model="values.username.value" />
-                            <div class="form-error" v-if="values.username.error">
-                                <img :src="require('../../assets/img/error-icon.svg')" /> {{this.values.username.error}}
+                            <input class="form-input" v-model="valuesData.username.value" />
+                            <div class="form-error" v-if="valuesData.username.error">
+                                <img :src="require('../../assets/img/error-icon.svg')" /> {{this.valuesData.username.error}}
                             </div>
                         </div>
                         <div class="form-block">
                             <div class="form-text login__left-padding">{{typeName}} description</div>
-                            <input class="form-input" v-model="values.description.value" />
-                            <div class="form-error" v-if="values.description.error">
-                                <img :src="require('../../assets/img/error-icon.svg')" /> {{this.values.description.error}}
+                            <input class="form-input" v-model="valuesData.description.value" />
+                            <div class="form-error" v-if="valuesData.description.error">
+                                <img :src="require('../../assets/img/error-icon.svg')" /> {{this.valuesData.description.error}}
                             </div>
                         </div>
                         <div class="flex-center mt-30">
@@ -65,9 +65,9 @@
                 step:1,
                 loadedAvatar: null,
                 createdChatData:null,
-                values: {
+                valuesData: {
                     name: {
-                        value: null,
+                        value: '22',
                         error: null
                     },
                     username: {
@@ -78,7 +78,8 @@
                         value: null,
                         error: null
                     },
-                }
+                },
+                
             }
         },
         methods: {
@@ -96,12 +97,12 @@
             },
             confirm() {
                 let isError;
-                if (!this.values.name.value || this.values.name.value.length === 0) {
-                    this.values.name.error = "Required field."
+                if (!this.valuesData.name.value || this.valuesData.name.value.length === 0) {
+                    this.valuesData.name.error = "Required field."
                     isError = true
                 }
-                if (!this.values.username.value || this.values.username.value.length === 0) {
-                    this.values.username.error = "Required field."
+                if (!this.valuesData.username.value || this.valuesData.username.value.length === 0) {
+                    this.valuesData.username.error = "Required field."
                     isError = true
                 }
                 if (isError) return
@@ -109,10 +110,10 @@
                     cid: this.initData ? this.initData.cid : null,
                     isEditMode: this.isEditMode,
                     chatData: {
-                        name: this.values.name.value,
-                        description: this.values.description.value,
+                        name: this.valuesData.name.value,
+                        description: this.valuesData.description.value,
                         image: this.loadedAvatar,
-                        username:this.values.name.value,
+                        username:this.valuesData.username.value,
                         ...(this.isEditMode ? {} : {
                             type: this.type
                         })
@@ -161,9 +162,9 @@
         created() {
             if (!this.isLoginForm && this.initData) {
                 this.loadedAvatar = this.initData.image || null
-                this.values.name.value = this.initData.name || null
-                this.values.username.value = this.initData.username || null
-                this.values.description.value = this.initData.description || null
+                this.valuesData.name.value = this.initData.name || null
+                this.valuesData.username.value = this.initData.username || null
+                this.valuesData.description.value = this.initData.description || null
             }
         }
     }

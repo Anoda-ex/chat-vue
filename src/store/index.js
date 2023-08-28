@@ -311,13 +311,15 @@ const store = createStore({
 				if(payload.cid && payload.isEditMode){
 					let db = getDatabase()
 					const newRef = ref(db, `/chatsData/${payload.cid}`);
-					set(newRef, {
-						...payload.chatData,
-					}).then(res=>{
+                    const updates = {};
+                    Object.entries(payload.chatData).forEach(([key, value])=>{
+                        updates[`/${key}`]=value
+                    })
+                    console.log('payload', updates);
+					update(newRef, updates).then(res=>{
 						resolve()
 					});
 				}else{
-
 					let db = getDatabase()
 					let newRef = push(ref(db, '/chatsData'));
 					set(newRef, {
