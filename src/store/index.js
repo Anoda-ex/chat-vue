@@ -523,7 +523,6 @@ const store = createStore({
 				});
 
 			})
-			return 'llllleeeee'
 		}
 	},
 	getters:{
@@ -557,18 +556,22 @@ const store = createStore({
 					let messagesData=[]
 					if(item.messagesData){
 						Object.keys(item.messagesData).forEach(mid=>{
-							let messageData = state.messagesData[mid]
+							let messageData = state.messagesData[mid];
+                            console.log('messageData', messageData);
 							if(messageData){
 								let type='text';
 								if(messageData.messageBody.voiceMessageData){
 									type='voiceMessage'
 								}
+                                let userData = state.usersData[messageData.uid]
+
 								messagesData.push({
 									...messageData,
 									isMyMessage: messageData.uid===state.user.uid,
 									mid: mid,
 									time:getTimeOfDay(messageData.createdAt),
-									type:type
+									type:type,
+                                    userData:userData
 
 								})
 							}

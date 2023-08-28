@@ -1950,7 +1950,7 @@ body{
     box-shadow: 0 1px 2px -1px #0000001a, 0 1px 2px -1px #0000001c, 0 1px 5px -1px #0000001c
 }
 
-.chat__message-wrapper .chat__message-current {
+.chat__message-wrapper .chat__message-my-message {
     background-color: var(--chat-message-bg-color-me) !important
 }
 
@@ -2727,10 +2727,17 @@ body{
     cursor: pointer;
 }
 
-/* .chat-audio-range::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: #4CAF50;
-    cursor: pointer;
-} */
+.chat__message-wrapper .chat__message-container{
+    display: flex;
+    align-items: center;
+}
+.chat__message-wrapper .chat__message-container .chat-avatar{
+    margin: 0;
+    align-self: unset;
+    margin-right: 10px;
+}
+.chat__format-message-username{
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
